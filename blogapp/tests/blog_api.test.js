@@ -65,6 +65,26 @@ test('check the contents of the blogs', async () => {
 
 })
 
+test('adding a new blog', async () => {
+    const newBlog = {
+        title: 'testing refactored backend',
+        author: 'tester',
+        url: 'testurl.com',
+        like: 1000
+    }
+
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+    const titles = response.body.map(blog => blog.title)
+
+    expect(response.body).toHaveLength(initialBlogs.length + 1)
+    expect(titles).toContain('testing refactored backend')
+})
 
 afterAll(async() => {
     await mongoose.connection.close()
