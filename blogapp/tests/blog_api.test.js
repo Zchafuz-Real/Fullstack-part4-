@@ -154,7 +154,37 @@ describe('api tests', () => {
         .post('/api/blogs')
         .send(newBlog)
         .expect(400)
+
+    })
+
+    test('fails if unable to delete a note', async () => {
+
+        await api
+        .delete(`/api/blogs/${initialBlogs[0]._id}`)
+        .expect(204)
+
+        response = await api.get('/api/blogs')
+        expect(response.body[0].title).toBe(initialBlogs[1].title)
+        expect(response.body).toHaveLength(initialBlogs.length - 1)
+
+    })
+
+    test('fails if unable to update a note', async () => {
+
+        const id = initialBlogs[0]._id
+
+        const newBlog = {
+            ...initialBlogs[0],
+            likes: 29
+        }
         
+        await api
+        .put(`/api/blogs/${id}`)
+        .send(newBlog)
+        .expect(200)
+
+        const editedBlog = await api.get(`/api/blogs/${id}`)
+        expect(editedBlog.body.likes).toBe(29)
     })
 
     afterAll(async() => {
