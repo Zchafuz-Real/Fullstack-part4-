@@ -30,6 +30,13 @@ describe('api tests', () => {
             url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
             likes: 12,
             __v: 0
+        },
+        {
+
+            title: 'no likes property',
+            author: 'not very liked',
+            url: 'badblog.com',
+            __v: 0
         }
     ]
     
@@ -110,6 +117,16 @@ describe('api tests', () => {
         expect(id).toBeDefined()
     })
     
+    test('to check the default value of the id parameter', async () => {
+
+        const response = await api.get('/api/blogs')
+        const no_like = response.body.find(blog => 
+            blog.title === 'no likes property')
+
+        expect(no_like).toBeDefined()    
+        expect(no_like).toHaveProperty( 'likes', 0 )
+    })
+
     afterAll(async() => {
         await mongoose.connection.close()
     })
