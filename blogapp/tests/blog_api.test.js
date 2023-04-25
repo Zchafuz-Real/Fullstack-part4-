@@ -127,6 +127,36 @@ describe('api tests', () => {
         expect(no_like).toHaveProperty( 'likes', 0 )
     })
 
+    test('check if proper error when no title', async () => {
+
+        const newBlog = {
+            author: 'forgot the title',
+            url: 'notitle.com',
+            likes: 1        
+        }
+
+        await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+
+    })
+
+    test('check if proper error when no url', async () => {
+
+        const newBlog = {
+            title: 'forgot the url',
+            author: 'urlforgotter',
+            likes: 2
+        }
+
+        await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+        
+    })
+
     afterAll(async() => {
         await mongoose.connection.close()
     })
