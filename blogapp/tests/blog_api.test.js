@@ -105,8 +105,8 @@ describe('api tests', () => {
     test('checking the existance of id parameter', async () => {
     
         const response = await api.get('/api/blogs')
-        const id = response.body.id
-    
+        const id = response.body[0].id
+        
         expect(id).toBeDefined()
     })
     
